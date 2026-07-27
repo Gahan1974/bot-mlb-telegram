@@ -50,7 +50,7 @@ import statsapi
 # =========================================================
 TELEGRAM_BOT_TOKEN = os.getenv("8608714162:AAF5qgP754_HTwP1LpvkbWnKkSPSwkEpCIQ")
 TELEGRAM_CHAT_ID = os.getenv("1531631680")
-UMBRAL_PROBABILIDAD = 50.0
+UMBRAL_PROBABILIDAD = 00.0
 
 HISTORIAL_ALERTAS = {}
 
