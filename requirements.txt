@@ -2,3 +2,5 @@ MLB-StatsAPI
 numpy
 requests
 pandas
+flask
+gunicorn
