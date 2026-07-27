@@ -6,25 +6,27 @@ import time
 from datetime import datetime
 
 # =========================================================
-# 🌐 0. SERVIDOR WEB EN SEGUNDO PLANO (REQUERIDO POR RENDER WEB SERVICE)
+# 🌐 1. SERVIDOR WEB FLASK (REQUERIDO PARA RENDER WEB SERVICE)
 # =========================================================
 from flask import Flask
 
 app = Flask(__name__)
 
 @app.route('/')
-def health_check():
-    return "Bot de MLB activo y monitoreando en Render.", 200
+def home():
+    # Esta ruta responde 200 OK a los Health Checks de Render
+    return "Bot de MLB activo y monitoreando entradas en tiempo real.", 200
 
-def run_web_server():
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+def ejecutar_servidor_web():
+    # Render asigna dinámicamente un puerto en la variable de entorno PORT
+    puerto = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=puerto)
 
-# Iniciar el servidor HTTP en un hilo separado
-threading.Thread(target=run_web_server, daemon=True).start()
+# Iniciar servidor web Flask en un hilo independiente (daemon)
+threading.Thread(target=ejecutar_servidor_web, daemon=True).start()
 
 # =========================================================
-# 📦 1. AUTO-INSTALADOR PREVENTIVO DE LIBRERÍAS
+# 📦 2. VERIFICACIÓN/INSTALACIÓN DE DEPENDENCIAS
 # =========================================================
 LIBRERIAS = {
     "pandas": "pandas",
@@ -44,17 +46,17 @@ import requests
 import statsapi
 
 # =========================================================
-# 📲 2. CONFIGURACIÓN DE TELEGRAM Y PARÁMETROS
+# 📲 3. CONFIGURACIÓN DE TELEGRAM Y PARÁMETROS
 # =========================================================
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "TU_BOT_TOKEN_AQUI")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "TU_CHAT_ID_AQUI")
+TELEGRAM_BOT_TOKEN = os.getenv("8608714162:AAF5qgP754_HTwP1LpvkbWnKkSPSwkEpCIQ")
+TELEGRAM_CHAT_ID = os.getenv("1531631680")
 UMBRAL_PROBABILIDAD = 80.0
 
 HISTORIAL_ALERTAS = {}
 
 def enviar_alerta_telegram(mensaje):
     if not TELEGRAM_BOT_TOKEN or TELEGRAM_BOT_TOKEN == "TU_BOT_TOKEN_AQUI":
-        print("\n⚠️ Telegram no configurado. Mensaje:")
+        print("\n⚠️ Telegram no configurado o token genérico. Mensaje:")
         print(mensaje)
         return
 
@@ -74,7 +76,7 @@ def enviar_alerta_telegram(mensaje):
         print(f"❌ Excepción en conexión con Telegram: {e}")
 
 # =========================================================
-# 🧮 3. MODELO DE PROBABILIDAD (NRFI)
+# 🧮 4. MODELO DE PROBABILIDAD (NRFI / ENTRADA LIMPIA)
 # =========================================================
 def calcular_probabilidad_entrada_limpia(whip, era, ops_proximos_bateadores, pitch_count=0, es_primer_inning=False):
     lambda_base = 0.46
@@ -98,7 +100,7 @@ def calcular_probabilidad_entrada_limpia(whip, era, ops_proximos_bateadores, pit
     return round(prob_no_carreras, 2), round(lambda_ajustado, 3)
 
 # =========================================================
-# ⚾ 4. EXTRACCIÓN Y MONITOREO DE INNINGS
+# ⚾ 5. LÓGICA DE EXTRACCIÓN Y MONITOREO EN VIVO
 # =========================================================
 def obtener_ops_proximos_bateadores(game_id, team_offense_type, next_batter_index=1, cantidad=3):
     ops_list = []
@@ -225,7 +227,7 @@ def monitorear_cambios_de_inning():
             print(f"⚠️ Error procesando {partido_nombre}: {e}")
 
 # =========================================================
-# 🏁 5. BUCLE DE EJECUCIÓN CONTINUA
+# 🏁 6. BUCLE PRINCIPAL DE EJECUCIÓN
 # =========================================================
 if __name__ == "__main__":
     print("🚀 Bucle de monitoreo iniciado.")
