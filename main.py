@@ -55,8 +55,6 @@ UMBRAL_PROBABILIDAD = 80.0
 HISTORIAL_ALERTAS = {}
 
 def enviar_alerta_telegram(mensaje):
-    # 🧪 Mensaje de prueba automático al arrancar el bot
-enviar_alerta_telegram("🧪 *PRUEBA DE CONEXIÓN:* El bot de MLB se ha iniciado correctamente en Render.")
     if not TELEGRAM_BOT_TOKEN or TELEGRAM_BOT_TOKEN == "TU_BOT_TOKEN_AQUI":
         print("\n⚠️ Telegram no configurado o token genérico. Mensaje:")
         print(mensaje)
