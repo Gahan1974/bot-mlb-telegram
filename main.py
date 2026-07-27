@@ -231,6 +231,10 @@ def monitorear_cambios_de_inning():
 # =========================================================
 if __name__ == "__main__":
     print("🚀 Bucle de monitoreo iniciado.")
+    
+    # 🧪 ENVÍO DE PRUEBA OBLIGATORIO AL ARRANCAR
+    enviar_alerta_telegram("🧪 *PRUEBA DE CONEXIÓN:* El bot en Render se ha conectado correctamente a Telegram.")
+    
     print("Escaneando estado de partidos cada 30 segundos...\n")
     while True:
         monitorear_cambios_de_inning()
